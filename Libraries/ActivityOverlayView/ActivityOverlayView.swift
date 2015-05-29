@@ -1,5 +1,7 @@
 import UIKit
-
+/**
+* ActivityOverlayView 为用户操作后的提升小窗口，呈现在窗口的最上层
+*/
 class ActivityOverlayView: UIView {
     private var activityIndicatorView: UIActivityIndicatorView {
         return self.viewWithTag(1) as! UIActivityIndicatorView

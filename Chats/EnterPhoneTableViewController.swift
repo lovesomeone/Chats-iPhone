@@ -19,11 +19,12 @@ class EnterPhoneTableViewController: UITableViewController {
         super.viewDidLoad()
         //注册单元格id
         tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextFieldTableViewCell))
-
+        //声明一个试图，并设置它的属性，最后赋给tableView的footerview
         let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 44+32))
         tableFooterView.autoresizingMask = .FlexibleWidth
         tableView.tableFooterView = tableFooterView
 
+        //创建一个guest按钮设置大小和坐标，并添加触控监听，并添加到tableFooterView中
         let continueAsGuestButton = UIButton.buttonWithType(.System) as! UIButton
         continueAsGuestButton.addTarget(self, action: "continueAsGuestAction", forControlEvents: .TouchUpInside)
         continueAsGuestButton.autoresizingMask = .FlexibleLeftMargin | .FlexibleRightMargin | .FlexibleTopMargin
@@ -41,6 +42,7 @@ class EnterPhoneTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        //获取cell，并设置监听、设置属性
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TextFieldTableViewCell), forIndexPath: indexPath) as! TextFieldTableViewCell
         let textField = cell.textField
         textField.addTarget(self, action: "textFieldDidChange:", forControlEvents: .EditingChanged)
@@ -59,6 +61,7 @@ class EnterPhoneTableViewController: UITableViewController {
     }
 
     func textFieldDidChange(textField: UITextField) {
+        //输入10个字符才开启验证
         let textLength = count(textField.text)
         navigationItem.rightBarButtonItem?.enabled = (textLength == 10)
     }

@@ -14,3 +14,28 @@
 4.什么在别的controller中可以直接访问AppDelegate中的方法，还有就是属性是否可以直接访问（待研究）
 
 5.TableViewStyle中的两种类型，Plain  多为常规表格， Grouped多用于偏好设置类的表格。对Grouped的可以参考http://shrikar.com/xcode-6-tutorial-grouped-uitableview/
+
+6.UIView的autoresizingMask属性的含义：
+    UIViewAutoresizingNone就是不自动调整。
+    UIViewAutoresizingFlexibleLeftMargin 自动调整与superView左边的距离，保证与superView右边的距离不变。
+    UIViewAutoresizingFlexibleRightMargin 自动调整与superView的右边距离，保证与superView左边的距离不变。
+    UIViewAutoresizingFlexibleTopMargin 自动调整与superView顶部的距离，保证与superView底部的距离不变。
+    UIViewAutoresizingFlexibleBottomMargin 自动调整与superView底部的距离，也就是说，与superView顶部的距离不变。
+    UIViewAutoresizingFlexibleWidth 自动调整自己的宽度，保证与superView左边和右边的距离不变。
+    UIViewAutoresizingFlexibleHeight 自动调整自己的高度，保证与superView顶部和底部的距离不变。
+    UIViewAutoresizingFlexibleLeftMargin  |UIViewAutoresizingFlexibleRightMargin 自动调整与superView左边的距离，保证与左边的距离和右边的距离和原来距左边和右边的距离的比例不变。比如原来距离为20，30，调整后的距离应为68，102，即68/20=102/30。
+
+其它的组合类似。
+
+7.UIButton 的创建（系统和自定义两种）和相关属性设置 详情可查看http://www.hangge.com/blog/cache/detail_529.html
+
+8.UITableViewController中 numberOfSectionsInTableView 省略不写是否默认值为1.（待验证）
+
+9.tableView.dequeueReusableCellWithIdentifier（），不是说有可能为nil吗 那么在什么情况下是nil，在该项目中第一次使用了，为什么可以直接使用  
+    猜测：先注册后，再获取时应该是能保证获取实例对象
+
+
+
+
+
+
