@@ -3,8 +3,9 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-
+   
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        //关注account对象中的accessToken的属性变化，当其变化时，本代理将进行相应的响应
         account.addObserver(self, forKeyPath: "accessToken", options: NSKeyValueObservingOptions(0), context: nil) // always
 
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
@@ -17,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: NSKeyValueObserving
 
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+       println("执行了 observeValueForKeyPath")
+        // 当accessToken的值不为nil时(即此时表明用户已经登录成功了)，根控制器为UITabBarController；当其为nil时（此时表明没有登录），根控制器为UINavigationController
         if account.accessToken != nil {
             window!.rootViewController = createTabBarController()
         } else {
@@ -27,34 +30,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 func createTabBarController() -> UITabBarController {
     // Create `usersCollectionViewController`
+    //创建被UINavigationController包裹的UsersCollectionViewController,并声明了在 tab bar controller 中代表自己的图标 Users
     let usersCollectionViewController = UsersCollectionViewController()
     usersCollectionViewController.tabBarItem.image = UIImage(named: "Users")
     let usersNavigationController = UINavigationController(rootViewController: usersCollectionViewController)
 
     // Create `chatsTableViewController`
+    //创建被UINavigationController包裹的ChatsTableViewController,并声明了在 tab bar controller 中代表自己的图标 Chats
     let chatsTableViewController = ChatsTableViewController()
     chatsTableViewController.tabBarItem.image = UIImage(named: "Chats")
     let chatsNavigationController = UINavigationController(rootViewController: chatsTableViewController)
 
     // Create `profileTableViewController`
+    //创建被UINavigationController包裹的ProfileTableViewController，并把登录用户对象传递进去,并声明了在 tab bar controller 中代表自己的图标 Profile
     let profileTableViewController = ProfileTableViewController(user: account.user)
     profileTableViewController.tabBarItem.image = UIImage(named: "Profile")
     let profileNavigationController = UINavigationController(rootViewController: profileTableViewController)
 
     // Create `settingsTableViewController`
+    //创建被UINavigationController包裹的SettingsTableViewController，并声明了在 tab bar controller 中代表自己的图标 Settings
     let settingsTableViewController = SettingsTableViewController()
     settingsTableViewController.tabBarItem.image = UIImage(named: "Settings")
     let settingsNavigationController = UINavigationController(rootViewController: settingsTableViewController)
 
+    //创建被UITabBarController并指定它的viewControllers对象，
     let tabBarController = UITabBarController(nibName: nil, bundle: nil)
     tabBarController.viewControllers = [usersNavigationController, chatsNavigationController, profileNavigationController, settingsNavigationController]
     return tabBarController
 }
 
 func continueAsGuest() {
+    //给登录账户赋值，作为静态数据值
     account.phone = "2102390602"
     account.user = User(ID: 24, username: "guest", firstName: "Guest", lastName: "User")
+    //赋值后会立即执行KVO中的响应函数
     account.accessToken = "guest_access_token"
+      
     let minute: NSTimeInterval = 60, hour = minute * 60, day = hour * 24
     account.chats = [
         Chat(user: User(ID: 1, username: "mattdipasquale", firstName: "Matt", lastName: "Di Pasquale"), lastMessageText: "Thatnks for checking out Chats! :-)", lastMessageSentDate: NSDate()),
@@ -85,4 +96,5 @@ func continueAsGuest() {
     for chat in account.chats {
         account.users.append(chat.user)
     }
+     
 }

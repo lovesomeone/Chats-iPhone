@@ -1,11 +1,15 @@
 import UIKit
 
 class EnterPhoneTableViewController: UITableViewController {
+    //在构造函数中设置默认值，方便外部调用初始化
     convenience init() {
+        //设置表格的样式为Grouped类型
         self.init(style: .Grouped)
+        //申明一个核查按钮并设置其响应方法，默认不可点击。并把它赋给导航栏的右侧按钮
         let verifyBarButtonItem = UIBarButtonItem(title: "Verify", style: .Done, target: self, action: "verifyAction")
         verifyBarButtonItem.enabled = false
         navigationItem.rightBarButtonItem = verifyBarButtonItem
+       //设置UITableViewController的标题
         title = "Enter Phone Number"
     }
 
@@ -13,6 +17,7 @@ class EnterPhoneTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //注册单元格id
         tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextFieldTableViewCell))
 
         let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 44+32))
@@ -26,6 +31,7 @@ class EnterPhoneTableViewController: UITableViewController {
         continueAsGuestButton.setTitle("Continue as Guest", forState: .Normal)
         continueAsGuestButton.titleLabel?.font = UIFont.systemFontOfSize(17)
         tableFooterView.addSubview(continueAsGuestButton)
+        
     }
 
     // MARK: - UITableViewDataSource
@@ -49,6 +55,7 @@ class EnterPhoneTableViewController: UITableViewController {
 
     func continueAsGuestAction() {
         continueAsGuest()
+        
     }
 
     func textFieldDidChange(textField: UITextField) {
