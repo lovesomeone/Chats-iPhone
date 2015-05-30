@@ -49,6 +49,7 @@ class EnterCodeViewController: UIViewController, CodeInputViewDelegate, UIAlertV
                         profileTableViewController.setEditing(true, animated: false)
                         self.navigationController?.pushViewController(profileTableViewController, animated: true)
                     default:
+                        
                         UIAlertView(dictionary: dictionary, error: error, delegate: self).show()
                         break
                     }

@@ -67,6 +67,7 @@ class EnterPhoneTableViewController: UITableViewController {
     }
 
     func verifyAction() {
+        //创建提示小窗口并显示出来
         let activityOverlayView = ActivityOverlayView.sharedView()
         activityOverlayView.showWithTitle("Connecting")
 
@@ -75,10 +76,11 @@ class EnterPhoneTableViewController: UITableViewController {
         var request = formRequest("POST", "/codes", ["phone": phone])
         let dataTask = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
             let statusCode = (response as! NSHTTPURLResponse).statusCode
-
+             //回到主线程，先让activityOverlayView解除显示
             dispatch_async(dispatch_get_main_queue(), {
                 activityOverlayView.dismissAnimated(true)
-
+                //当返回状态码为201 或者200时，创建EnterCodeViewController并设置其属性，最后压栈到navigationController中
+                //当为其他状态码时，序列化其返回结果并且使用UIAlertView显示
                 switch statusCode {
                 case 201, 200: // sign-up, log-in
                     let enterCodeViewController = EnterCodeViewController(nibName: nil, bundle: nil)

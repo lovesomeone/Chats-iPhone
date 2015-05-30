@@ -34,6 +34,15 @@
 9.tableView.dequeueReusableCellWithIdentifier（），不是说有可能为nil吗 那么在什么情况下是nil，在该项目中第一次使用了，为什么可以直接使用  
     猜测：先注册后，再获取时应该是能保证获取实例对象
 
+10.该项目中TextFieldTableViewCell的 extension UITableView 关于扩展的使用和具体含义（待验证）需要记住它的6种扩展规则
+
+11.NSURLSession的使用，同时了解swift中的访问数据的所有方法（待验证）
+
+12.NSJSONSerialization.JSONObjectWithData（） 的使用（待验证）
+
+13.温习一下UIAlertView的使用（待学习）
+
+
 
 
 
