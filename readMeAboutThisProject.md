@@ -42,7 +42,7 @@
 
 13.温习一下UIAlertView的使用（待学习）
 
-
+14.uitableviewcontroller的生命周期
 
 
 
