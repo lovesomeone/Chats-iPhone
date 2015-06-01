@@ -1,6 +1,8 @@
 import UIKit
 
+//验证码输入框视图
 class CodeInputView: UIView, UIKeyInput {
+    //代理申明
     var delegate: CodeInputViewDelegate?
     var nextTag = 1
 
@@ -16,6 +18,7 @@ class CodeInputView: UIView, UIKeyInput {
             digitLabel.text = "–"
             digitLabel.textAlignment = .Center
             self.addSubview(digitLabel)
+            //每个label间隔15
             frame.origin.x += 35 + 15
         }
     }
@@ -36,11 +39,13 @@ class CodeInputView: UIView, UIKeyInput {
         return nextTag > 1 ? true : false
     }
 
+    //插入文本
     func insertText(text: String) {
+        //当四个digitLabel没有全部输入时，通过tag获取它的当前输入label，把它赋值
         if nextTag < 5 {
             (self.viewWithTag(nextTag) as! UILabel).text = text
             ++nextTag
-
+            //当输入最后一个文本时，获取整个文本输入，执行代理函数
             if nextTag == 5 {
                 var code = (self.viewWithTag(1) as! UILabel).text!
                 for index in 2..<nextTag {
@@ -50,14 +55,14 @@ class CodeInputView: UIView, UIKeyInput {
             }
         }
     }
-
+    //从后向前删除一个输入文本
     func deleteBackward() {
         if nextTag > 1 {
             --nextTag
             (self.viewWithTag(nextTag) as! UILabel).text = "-"
         }
     }
-
+    //清空输入文本
     func clear() {
         while nextTag > 1 {
             deleteBackward()
@@ -65,7 +70,7 @@ class CodeInputView: UIView, UIKeyInput {
     }
 
     // MARK: - UITextInputTraits
-
+    //输入键盘的类型为数字
     var keyboardType: UIKeyboardType { get { return .NumberPad } set { } }
 }
 

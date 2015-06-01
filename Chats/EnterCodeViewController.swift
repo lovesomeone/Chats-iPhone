@@ -25,14 +25,14 @@ class EnterCodeViewController: UIViewController, CodeInputViewDelegate, UIAlertV
 
         //创建验证码输入框，设置属性，并把它添加到视图中，同时设置输入框为第一响应对象
         let codeInputView = CodeInputView(frame: CGRect(x: (view.frame.width-215)/2, y: 242, width: 215, height: 60))
-        codeInputView.delegate = self
+        codeInputView.delegate = self //设置代理
         codeInputView.tag = 17
         view.addSubview(codeInputView)
         codeInputView.becomeFirstResponder()
     }
 
     // MARK: - CodeInputViewDelegate
-    //代理协议的实现
+    //代理协议的实现————当输入框填写完成后，该方法会被调用
     func codeInputView(codeInputView: CodeInputView, didFinishWithCode code: String) {
        //显示验证或者登陆的信息提示框
         let activityOverlayView = ActivityOverlayView.sharedView()
@@ -77,8 +77,10 @@ class EnterCodeViewController: UIViewController, CodeInputViewDelegate, UIAlertV
                     case 201:
                           //当返回码为201时即为创建成功,从返回数据中取出access_token的值
                         let accessToken = dictionary!["access_token"] as String!
+                        //这个取值规则暂时没弄清楚，需要结合后台数据来分析
                         let userIDString = accessToken.substringToIndex(advance(accessToken.endIndex, -33))
                         let userID = UInt(userIDString.toInt()!)
+                        // 给account对象中的属性赋值，当accessToken改变时，会引起AppDelegate中的KVO响应函数
                         account.user = User(ID: userID, username: "", firstName: "", lastName: "")
                         account.accessToken = accessToken
                     default:

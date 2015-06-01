@@ -1,6 +1,8 @@
 import UIKit
 
+//设置控制中心
 class SettingsTableViewController: UITableViewController, UIActionSheetDelegate {
+    //自定义枚举类型
     enum Section : Int {
         case Phone
         case LogOut
@@ -8,25 +10,28 @@ class SettingsTableViewController: UITableViewController, UIActionSheetDelegate 
     }
 
     convenience init() {
+        //group样式的类型表格，设置标题
         self.init(style: .Grouped)
         title = "Settings"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //注册单元格
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
     }
 
     // MARK: - UITableViewDataSource
-
+    //3个section
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 3
     }
-
+    //每个section的行数数量
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
+    //每行的单元格填充
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // Set style & identifier based on section
         let section = Section(rawValue: indexPath.section)!

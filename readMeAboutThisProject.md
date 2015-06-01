@@ -44,7 +44,19 @@
 
 14.uitableviewcontroller的生命周期
 
+15.String 的 substringToIndex 的用法及advance的用法,count,startIndex ,endIndex
+   a)advance(startIndex,stepNum),第一个参数为起始索引，第二个参数为前进步数，当为负值了就从后向前步进
+   b)endIndex
 
+16. UIKeyboardType输入键盘的类型有哪些，需要掌握(有11种，详见：http://jingyan.baidu.com/article/e75aca855a7c03142edac6c9.html)
 
+17.UIBarButtonSystemItem的类型有24种 ，详见：http://m.blog.csdn.net/blog/thelma_yuan/39227553
 
+18.键盘交互模式（3种）涉及到键盘的隐藏，响应更多的掌握（待验证）参考一个文档：http://www.tuicool.com/articles/j6VJRr
+    case None
+    case OnDrag // dismisses the keyboard when a drag begins
+    case Interactive
+19.图片的翻转UIImageOrientation，有8种，需要掌握(待学习)
+
+20. if message.incoming != (tag == incomingTag) { 非常的不明白这句的含义
 

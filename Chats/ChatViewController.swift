@@ -6,6 +6,7 @@ let toolBarMinHeight: CGFloat = 44
 let textViewMaxHeight: (portrait: CGFloat, landscape: CGFloat) = (portrait: 272, landscape: 90)
 let messageSoundOutgoing: SystemSoundID = createMessageSoundOutgoing()
 
+//聊天视图控制中心
 class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     let chat: Chat
     var tableView: UITableView!
@@ -72,7 +73,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        //和某人聊天的记录，在这儿静态填充
         chat.loadedMessages = [
             [
                 Message(incoming: true, text: "I really enjoyed programming with you! :-)", sentDate: NSDate(timeIntervalSinceNow: -60*60*24*2-60*60)),
@@ -85,9 +86,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             ]
         ]
 
+        //背景设为白色
         let whiteColor = UIColor.whiteColor()
         view.backgroundColor = whiteColor // smooths push animation
 
+        //创建tableview，设置属性（宽、高，比例固定）；代理设置，注册MessageSentDateTableViewCell单元格，最后把它添加到视图中
         tableView = UITableView(frame: view.bounds, style: .Plain)
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         tableView.backgroundColor = whiteColor
@@ -100,7 +103,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.separatorStyle = .None
         tableView.registerClass(MessageSentDateTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(MessageSentDateTableViewCell))
         view.addSubview(tableView)
-
+        //在消息中心注册键盘的UIKeyboardWillShowNotification、UIKeyboardDidShowNotification和UIMenuControllerWillHideMenuNotification消息
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -152,36 +155,47 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 //    }
 
+   
+    //tableview中的section数目，来源为loadedMessages中的数组元素个数
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return chat.loadedMessages.count
     }
 
+    //每个section中的行数的数量（？？为什么+1）
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chat.loadedMessages[section].count + 1 // for sent-date cell
     }
-
+    //创建每个显示行的单元格
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        //当为第一行时,获取MessageSentDateTableViewCell对象
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MessageSentDateTableViewCell), forIndexPath: indexPath) as! MessageSentDateTableViewCell
+            //获取第一个section的第一条message
             let message = chat.loadedMessages[indexPath.section][0]
+            //设置全局实例dateFormatter的属性，并且把格式化时间后的值填充到单元格中
             dateFormatter.dateStyle = .ShortStyle
             dateFormatter.timeStyle = .ShortStyle
             cell.sentDateLabel.text = dateFormatter.stringFromDate(message.sentDate)
             return cell
         } else {
+            //当为其它行时，
+            //获取MessageBubbleTableViewCell，当其为空时，我们手动创建一个
             let cellIdentifier = NSStringFromClass(MessageBubbleTableViewCell)
             var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! MessageBubbleTableViewCell!
             if cell == nil {
                 cell = MessageBubbleTableViewCell(style: .Default, reuseIdentifier: cellIdentifier)
 
                 // Add gesture recognizers #CopyMessage
+                //新建手势识别器，设置为双击特性，
                 let action: Selector = "messageShowMenuAction:"
                 let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: action)
                 doubleTapGestureRecognizer.numberOfTapsRequired = 2
+                //把单元格中的bubbleImageView对象添加双击手势识别和长按手势识别，响应方法都为action
                 cell.bubbleImageView.addGestureRecognizer(doubleTapGestureRecognizer)
                 cell.bubbleImageView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: action))
             }
-            let message = chat.loadedMessages[indexPath.section][indexPath.row-1]
+            //获取当前section中的对于row中的message，并填充单元格
+            let message = chat.loadedMessages[indexPath.section][indexPath.row-1] //此处-1是因为 row是从1开始的，0是上面显示了日期
             cell.configureWithMessage(message)
             return cell
         }

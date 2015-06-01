@@ -3,15 +3,18 @@ import UIKit
 let incomingTag = 0, outgoingTag = 1
 let bubbleTag = 8
 
+//消息冒泡显示视图
 class MessageBubbleTableViewCell: UITableViewCell {
-    let bubbleImageView: UIImageView
-    let messageLabel: UILabel
+    let bubbleImageView: UIImageView //消息背景视图
+    let messageLabel: UILabel        //消息文本
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        //创建视图对象，设置属性，开启交互功能
         bubbleImageView = UIImageView(image: bubbleImage.incoming, highlightedImage: bubbleImage.incomingHighlighed)
         bubbleImageView.tag = bubbleTag
         bubbleImageView.userInteractionEnabled = true // #CopyMesage
 
+        //创建UILabel对象，默认大小为0，设置属性，关闭交互功能
         messageLabel = UILabel(frame: CGRectZero)
         messageLabel.font = UIFont.systemFontOfSize(messageFontSize)
         messageLabel.numberOfLines = 0
@@ -20,6 +23,7 @@ class MessageBubbleTableViewCell: UITableViewCell {
         super.init(style: .Default, reuseIdentifier: reuseIdentifier)
         selectionStyle = .None
 
+        //把消息背景视图添加到视图中，把UILabel添加到消息背景视图中
         contentView.addSubview(bubbleImageView)
         bubbleImageView.addSubview(messageLabel)
 
@@ -82,13 +86,17 @@ class MessageBubbleTableViewCell: UITableViewCell {
     }
 }
 
+//消息呈现的图像框
 let bubbleImage = bubbleImageMake()
 
 func bubbleImageMake() -> (incoming: UIImage, incomingHighlighed: UIImage, outgoing: UIImage, outgoingHighlighed: UIImage) {
+    //创建信息发送出去的背景图片MessageBubble
     let maskOutgoing = UIImage(named: "MessageBubble")!
+    //创建信息接受到的背景图片——把上面的图片进行加工处理就好了
     let maskIncoming = UIImage(CGImage: maskOutgoing.CGImage, scale: 2, orientation: .UpMirrored)!
-
+    //新建接受的消息显示的边距 （？？值是怎么来的？）
     let capInsetsIncoming = UIEdgeInsets(top: 17, left: 26.5, bottom: 17.5, right: 21)
+    //新建发生的消息显示的边距 （？？值是怎么来的？）
     let capInsetsOutgoing = UIEdgeInsets(top: 17, left: 21, bottom: 17.5, right: 26.5)
 
     let incoming = coloredImage(maskIncoming, 229/255, 229/255, 234/255, 1).resizableImageWithCapInsets(capInsetsIncoming)
@@ -99,6 +107,7 @@ func bubbleImageMake() -> (incoming: UIImage, incomingHighlighed: UIImage, outgo
     return (incoming, incomingHighlighted, outgoing, outgoingHighlighted)
 }
 
+//对图像进行RGB处理
 func coloredImage(image: UIImage, red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) -> UIImage! {
     let rect = CGRect(origin: CGPointZero, size: image.size)
     UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)

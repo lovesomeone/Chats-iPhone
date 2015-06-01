@@ -1,6 +1,7 @@
 import MobileCoreServices
 import UIKit
 
+//信息展示控制中心
 class ProfileTableViewController: UITableViewController, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var phone: String?
     var key: String?
@@ -19,7 +20,8 @@ class ProfileTableViewController: UITableViewController, UIActionSheetDelegate, 
         self.user = user
         super.init(nibName: nil, bundle: nil) // iOS bug: should be: super.init(style: .Plain)
         title = "Profile"
-
+        //当初始化时传递进来的用户和登陆时的用户一致时，表明是本人自己
+        //则让导航栏的rightBarButtonItem为编辑按钮,否则为新建的样式为Compose的按钮
         if user === account.user {
             navigationItem.rightBarButtonItem = editButtonItem()
         } else {
@@ -35,11 +37,13 @@ class ProfileTableViewController: UITableViewController, UIActionSheetDelegate, 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        //注册单元格
         tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextFieldTableViewCell))
+        //？？暂时没搞明白
         tableView.separatorInset.left = 12 + 60 + 12 + 22
         tableView.tableFooterView = UIView(frame: CGRectZero) // hides trailing separators
 
+        //用户存在则添加头像和姓名
         if let user = user {
             addPictureAndName()
         }
@@ -153,16 +157,19 @@ class ProfileTableViewController: UITableViewController, UIActionSheetDelegate, 
     }
 
     func addPictureAndName() {
+        //声明显示头像的组件并设置大小，和属性，最后添加到tableView中
         let userPictureImageView = UserPictureImageView(frame: CGRect(x: 15, y: 12, width: 60, height: 60))
         userPictureImageView.configureWithUser(user!)
         userPictureImageView.tag = 3
         tableView.addSubview(userPictureImageView)
 
+        //申明tableview的头部视图，设置属性（这几个值暂时没搞清）
         let tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 12+60+12))
         tableHeaderView.autoresizingMask = .FlexibleWidth
         tableHeaderView.userInteractionEnabled = false
         tableView.tableHeaderView = tableHeaderView
 
+        //申明显示姓名的label大小，属性，最后添加到tableHeaderView中
         let nameLabel = UILabel(frame: CGRect(x: 91, y: 31, width: tableHeaderView.frame.width-91, height: 21))
         nameLabel.autoresizingMask = .FlexibleWidth
         nameLabel.font = UIFont.boldSystemFontOfSize(17)
@@ -171,8 +178,9 @@ class ProfileTableViewController: UITableViewController, UIActionSheetDelegate, 
     }
 
     // MARK: Actions
-
+    //聊天，
     func chatAction() {
+        //创建chat对象，传递给新建的ChatViewController对象，并压栈
         let chat = Chat(user: user!, lastMessageText: "", lastMessageSentDate: NSDate()) // TODO: Pass nil for text & date
         navigationController?.pushViewController(ChatViewController(chat: chat), animated: true)
     }
