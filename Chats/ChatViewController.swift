@@ -18,8 +18,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override var inputAccessoryView: UIView! {
     get {
         if toolBar == nil {
+            //什么UIToolbar的大小
             toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
-
+            //创建输入框，大小为0，设置属性，代理，外观，和边界，最后添加到toolBar中
             textView = InputTextView(frame: CGRectZero)
             textView.backgroundColor = UIColor(white: 250/255, alpha: 1)
             textView.delegate = self
@@ -32,6 +33,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             textView.textContainerInset = UIEdgeInsetsMake(4, 3, 3, 3)
             toolBar.addSubview(textView)
 
+            //创建按钮，设置属性，边界，事件响应，最后添加到toolBar中
             sendButton = UIButton.buttonWithType(.System) as! UIButton
             sendButton.enabled = false
             sendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(17)
@@ -45,11 +47,18 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             // Auto Layout allows `sendButton` to change width, e.g., for localization.
             textView.setTranslatesAutoresizingMaskIntoConstraints(false)
             sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+           
+            //设置约束：textView的左边距离toolBar的左边间隔8point
             toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
+            //设置约束：textView的顶部距离toolBar的顶部间隔7.5point
             toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
+            //设置约束：textView的右边距离sendButton的左边间隔2point
             toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
+            //设置约束：textView的底部距离toolBar的底部间隔8point
             toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
+            //设置约束：sendButton的右边距离toolBar的右边间隔0point
             toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Right, relatedBy: .Equal, toItem: toolBar, attribute: .Right, multiplier: 1, constant: 0))
+            //设置约束：sendButton的底部距离toolBar的底部间隔4.5point
             toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
         }
         return toolBar
@@ -214,11 +223,15 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo as NSDictionary!
         let frameNew = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        println("frameNew = \(frameNew)");
         let insetNewBottom = tableView.convertRect(frameNew, fromView: nil).height
+         println("insetNewBottom = \(insetNewBottom)");
         let insetOld = tableView.contentInset
+          println("insetOld = \(insetOld) ===\(insetOld.bottom)");
         let insetChange = insetNewBottom - insetOld.bottom
+         println("tableView.contentSize.height = \(tableView.contentSize.height) ");
         let overflow = tableView.contentSize.height - (tableView.frame.height-insetOld.top-insetOld.bottom)
-
+        println("overflow = \(overflow)");
         let duration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         let animations: (() -> Void) = {
             if !(self.tableView.tracking || self.tableView.decelerating) {
@@ -245,7 +258,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let userInfo = notification.userInfo as NSDictionary!
         let frameNew = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         let insetNewBottom = tableView.convertRect(frameNew, fromView: nil).height
-
+    println("keyboardDidShow")
         // Inset `tableView` with keyboard
         let contentOffsetY = tableView.contentOffset.y
         tableView.contentInset.bottom = insetNewBottom
