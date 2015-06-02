@@ -60,3 +60,5 @@
 
 20. if message.incoming != (tag == incomingTag) { 非常的不明白这句的含义
 
+21.NSNotificationCenter的使用
+
