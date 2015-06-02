@@ -60,5 +60,8 @@
 
 20. if message.incoming != (tag == incomingTag) { 非常的不明白这句的含义
 
-21.NSNotificationCenter的使用
+21.BOOL contains = CGRectContainsPoint(CGRect rect, CGPoint point);
+判断一个CGPoint 是否包含再另一个UIView的CGRect里面,常用与测试给定的对象之间是否又重叠
+
+22.NSNotificationCenter的使用
 
