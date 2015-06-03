@@ -63,4 +63,8 @@
 21.BOOL contains = CGRectContainsPoint(CGRect rect, CGPoint point);
 判断一个CGPoint 是否包含再另一个UIView的CGRect里面,常用与测试给定的对象之间是否又重叠
 
+//2015.6.3 今天做整个项目的梳理总结
+1. app的整个生命周期、相应代码执行的条件.查看视频：https://www.youtube.com/watch?v=silrqFmux-s And  https://www.youtube.com/watch?v=qvNJG64ZTug
+
+2.UIViewController的生命周期
 
